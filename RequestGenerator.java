@@ -7,10 +7,12 @@ class RequestGenerator {
             "Network issue","Upgrade of accessories", "Viruses cleaning", "Replace hardware", "Upgrade OS"};
     private final Random random = new Random();
 
-    public Request generateRequest() {
+    public Request generateRequest(boolean informationOutput) {
         int id = requestIdCounter.getAndIncrement();
         String description = descriptions[random.nextInt(descriptions.length)];
-        System.out.println("\nSystem has received an request with issue: "+ description);
+        if (informationOutput){
+            System.out.println("System has received an request with issue: "+ description);
+        }
         return new Request(id, description);
     }
 }

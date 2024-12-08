@@ -9,6 +9,7 @@ class MainSystem {
     private final int queueBufferCapacity;
     private final int technicianQuantity;
     private final int requestsQuantity;
+    private double time=0;
 
     public MainSystem(int queueBufferCapacity, int technicianQuantity, int requestsQuantity) {
         this.requestsQuantity=requestsQuantity;
@@ -28,7 +29,7 @@ class MainSystem {
                 break;
             case  "s":
                 isStepMode=true;
-                System.out.println("You selected step-by-step mod");
+                System.out.println("You selected step-by-step mod\n\nTime: 0\n");
                 break;
             default:
                 System.out.println("Invalid input!");
@@ -49,19 +50,55 @@ class MainSystem {
             technicians.add(new Technician(i, firstName+" "+lastName, 0.5));
         }
 
-        RequestDistribution distribution = new RequestDistribution(technicians, buffer);
+        boolean timeChecker=false;
+        RequestDistribution distribution = new RequestDistribution(technicians, buffer, isStepMode);
+
         for (int i = 0; i < requestsQuantity; i++) {
+            if (timeChecker&& isStepMode){
+                System.out.println("\n\nTime: "+getTime());
+                timeChecker=false;
+            }
                 if (isStepMode){
                     in.nextLine();
                 }
-                Request request = generator.generateRequest();
+                Request request = generator.generateRequest(isStepMode);
                 distribution.distributeRequests(request);
+
+                if (random.nextInt(3)==1) {
+                    if (isStepMode){
+                        System.out.println("Service execution process");
+                    }
+                    distribution.updateTime();
+                    timeChecker=true;
+                }
         }
 
         in.close();
-        System.out.println("\nAt the end:");
-        for (Technician technician : technicians) {
-            System.out.println(technician.getName() + " - Current Request: " + technician.getCurrentRequestId());
+        if (isStepMode){
+            System.out.println("\nAt the end:");
+            for (Technician technician : technicians) {
+                System.out.println(technician.getName() + " - Current Request: " + technician.getCurrentRequestId());
+            }
+        }else{
+            System.out.println("\nApplications received "+requestsQuantity+" requests and removed "+distribution.showRemovedAmount());
+            System.out.println("\nInformation about technicians:");
+            System.out.printf("%-10s %-20s %-30s %-30s%n", "Id", "Full Name", "Completed Requests", "Current Request");
+            System.out.println("=".repeat(90));
+            for (Technician technician : technicians) {
+                System.out.printf("%-10d %-20s %-30d %-30s%n",
+                        technician.getId(),
+                        technician.getName(),
+                        technician.getDoneRequestsAmount(),
+                        technician.getCurrentRequestId() == -1 ? "None" : technician.getCurrentRequestId());
+            }
+            System.out.println("-".repeat(90));
+            distribution.printBufferDetails();
+
         }
     }
+
+    public double getTime(){
+        return this.time+=0.5;
+    }
+
 }

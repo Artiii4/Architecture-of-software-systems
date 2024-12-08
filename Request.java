@@ -7,11 +7,11 @@ class Request {
         this.description = description;
     }
 
-    public int getId() {
-        return id;
+    public  String getDescription(){
+        return this.description;
     }
 
-    public String getDescription() {
-        return description;
+    public int getId() {
+        return id;
     }
 }

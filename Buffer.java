@@ -4,6 +4,7 @@ class Buffer {
     private final int maxCapacity;
     private final ArrayList<Request> requestsBuffer;
     private int lastUsedBufferCellId = 0;
+    private int removedAmount=0;
 
     public Buffer(int maxCapacity) {
         this.maxCapacity = maxCapacity;
@@ -13,6 +14,14 @@ class Buffer {
         }
     }
 
+    public int getMaxCapacity(){
+        return maxCapacity;
+    }
+
+    public int getRemovedAmount(){
+        return removedAmount;
+    }
+
     public void printAllRequests() {
         if (isEmpty()) {
             System.out.println("The request buffer is empty.");
@@ -20,6 +29,19 @@ class Buffer {
         }
 
         System.out.println("Current Requests in Buffer:");
+        int i;
+        for (i=0;i<lastUsedBufferCellId;i++){
+            if (requestsBuffer.get(i)==null){
+                System.out.print("      ");
+            }else{
+                System.out.print("   ");
+            }
+        }
+        if (requestsBuffer.get(i)==null){
+            System.out.print(" vv\n");
+        }else{
+            System.out.print("v\n");
+        }
         for (Request request : requestsBuffer) {
             if (request == null) {
                 System.out.print("null, ");
@@ -47,6 +69,7 @@ class Buffer {
                 maxIdFound = i;
             }
         }
+        removedAmount++;
         requestsBuffer.set(maxIdFound, request);
         return false;
     }
@@ -57,6 +80,10 @@ class Buffer {
                 requestsBuffer.set(i, null);
             }
         }
+    }
+
+    public Request get(int i){
+        return requestsBuffer.get(i);
     }
 
     public Request getNextRequest() {

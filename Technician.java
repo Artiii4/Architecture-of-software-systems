@@ -5,6 +5,7 @@ class Technician {
     private int currentRequestId;
     private double remainingServiceTime;
     private ExponentialDistribution exponentialDistribution;
+    private int doneRequestsAmount=0;
 
     public Technician(int id, String fullName, double lambda) {
         this.id = id;
@@ -15,8 +16,16 @@ class Technician {
         this.exponentialDistribution= new ExponentialDistribution(lambda);
     }
 
+    public int getId(){
+        return id;
+    }
+
     public String getName() {
         return fullName;
+    }
+
+    public int getDoneRequestsAmount(){
+        return doneRequestsAmount;
     }
 
     public boolean isAvailable() {
@@ -27,27 +36,31 @@ class Technician {
         return currentRequestId;
     }
 
-    public void processRequest(Request request) {
+    public void processRequest(Request request, boolean informationOutput) {
         if(this.isAvailable){
             this.isAvailable = false;
             this.currentRequestId = request.getId();
             this.remainingServiceTime= exponentialDistribution.generateServiceTime();
-            System.out.println("Technician " + fullName + " is processing request " + request.getId()+ "  service time "+remainingServiceTime);
+            if (informationOutput){
+                System.out.println("Technician " + fullName + " is processing request " + request.getId()+ "  service time "+remainingServiceTime);
+            }
         }
     }
 
-    public void updateServiceTime(){
+    public void updateServiceTime(boolean informationOutput){
         if (!isAvailable){
-            remainingServiceTime-=0.5;
+            remainingServiceTime-=1;
             if (remainingServiceTime<=0){
-                completeRequest();
-                System.out.println("Technician "+ fullName+ " is free for now");
+                if (informationOutput){
+                    System.out.println("Technician "+ fullName+ " is free for now");
+                }
             }
         }
     }
 
     private void completeRequest() {
-        this.isAvailable = true;
-        this.currentRequestId = -1;
+        doneRequestsAmount++;
+        isAvailable = true;
+        currentRequestId = -1;
     }
 }

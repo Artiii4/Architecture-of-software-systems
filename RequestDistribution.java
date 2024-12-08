@@ -4,31 +4,64 @@ class RequestDistribution {
     private final List<Technician> technicians;
     private Buffer buffer;
     private int lastTechnicianId = 0;
+    private boolean informationOutput;
 
-    public RequestDistribution(List<Technician> technicians, Buffer buffer) {
+    public RequestDistribution(List<Technician> technicians, Buffer buffer, boolean informationOutput) {
         this.technicians = technicians;
         this.buffer = buffer;
+        this.informationOutput= informationOutput;
     }
 
     public void distributeRequests(Request requestGet) {
         Technician technician = getFreeTechnician();
         if (buffer.isEmpty()&& technician!=null){
-            technician.processRequest(requestGet);
-            System.out.println("Assigned Request " + requestGet.getId() + " to Technician " + technician.getName());
+            technician.processRequest(requestGet, informationOutput);
+            if (informationOutput){
+                System.out.println("Assigned Request " + requestGet.getId()+" with discription"+requestGet.getDescription() + " to Technician " + technician.getName());
+            }
         }else {
             buffer.addRequest(requestGet);
             if (technician != null) {
                 Request requestToDo = buffer.getNextRequest();
-                technician.processRequest(requestToDo);
+                technician.processRequest(requestToDo, informationOutput);
                 buffer.removeRequest(requestToDo.getId());
-                System.out.println("Assigned Request " + requestToDo.getId() + " to Technician " + technician.getName());
+                if (informationOutput){
+                    System.out.println("Assigned Request " + requestToDo.getId() + " with discription"+requestGet.getDescription() +" to Technician " + technician.getName());
+                }
             }
         }
-
-        for (Technician techn: technicians){
-            techn.updateServiceTime();
+        if (informationOutput){
+            buffer.printAllRequests();
         }
-        buffer.printAllRequests();
+    }
+
+    public int showRemovedAmount(){
+        return buffer.getRemovedAmount();
+    }
+
+    public void printBufferDetails() {
+        if (buffer.isEmpty()) {
+            System.out.println("The request buffer is empty.");
+            return;
+        }
+        System.out.println("\nInformation about buffer:");
+        System.out.printf("%-10s %-30s%n", "Request ID", "Description");
+        System.out.println("=".repeat(40));
+        for (int i = 0; i < buffer.getMaxCapacity(); i++) {
+            Request request = buffer.get(i);
+            if (request == null) {
+                System.out.printf("%-10s %-30s%n", "null", "No request");
+            } else {
+                System.out.printf("%-10d %-30s%n", request.getId(), request.getDescription());
+            }
+        }
+        System.out.println("-".repeat(40));
+    }
+
+    public void updateTime(){
+        for (Technician technician: technicians){
+            technician.updateServiceTime(informationOutput);
+        }
     }
 
     public Technician getFreeTechnician() {
