@@ -9,7 +9,7 @@ class MainSystem {
     private final int queueBufferCapacity;
     private final int technicianQuantity;
     private final int requestsQuantity;
-    private double time=0;
+    private int time=0;
 
     public MainSystem(int queueBufferCapacity, int technicianQuantity, int requestsQuantity) {
         this.requestsQuantity=requestsQuantity;
@@ -97,8 +97,8 @@ class MainSystem {
         }
     }
 
-    public double getTime(){
-        return this.time+=0.5;
+    public int getTime(){
+        return this.time++;
     }
 
 }

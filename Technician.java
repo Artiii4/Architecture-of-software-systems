@@ -51,6 +51,7 @@ class Technician {
         if (!isAvailable){
             remainingServiceTime-=1;
             if (remainingServiceTime<=0){
+                completeRequest();
                 if (informationOutput){
                     System.out.println("Technician "+ fullName+ " is free for now");
                 }
