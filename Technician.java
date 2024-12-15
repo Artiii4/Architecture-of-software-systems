@@ -6,14 +6,18 @@ class Technician {
     private double remainingServiceTime;
     private ExponentialDistribution exponentialDistribution;
     private int doneRequestsAmount=0;
+    private double totalBusyTime = 0.0;
+    private double timeLefted=0.0;
+    private final boolean type;
 
-    public Technician(int id, String fullName, double lambda) {
+    public Technician(int id, String fullName, double lambda, boolean type) {
         this.id = id;
         this.fullName = fullName;
         this.isAvailable = true;
         this.currentRequestId = -1;
         this.remainingServiceTime = 0.0;
         this.exponentialDistribution= new ExponentialDistribution(lambda);
+        this.type=type;
     }
 
     public int getId(){
@@ -37,24 +41,34 @@ class Technician {
     }
 
     public void processRequest(Request request, boolean informationOutput) {
-        if(this.isAvailable){
-            this.isAvailable = false;
-            this.currentRequestId = request.getId();
-            this.remainingServiceTime= exponentialDistribution.generateServiceTime();
-            if (informationOutput){
-                System.out.println("Technician " + fullName + " is processing request " + request.getId()+ "  service time "+remainingServiceTime);
-            }
+        this.isAvailable = false;
+        this.currentRequestId = request.getId();
+        if (type){
+            this.remainingServiceTime= exponentialDistribution.generateServiceTime()- timeLefted;
+        }else{
+            this.remainingServiceTime= exponentialDistribution.generateServiceTime()/2- timeLefted;
         }
+        timeLefted=0;
+        if (informationOutput){
+            System.out.println("Technician " + fullName + " is processing request " + request.getId()+ "  service time "+remainingServiceTime);
+        }
+    }
+
+    public  double getTotalBusyTime(){
+        return totalBusyTime;
     }
 
     public void updateServiceTime(boolean informationOutput){
         if (!isAvailable){
-            remainingServiceTime-=1;
-            if (remainingServiceTime<=0){
+            totalBusyTime++;
+            if (remainingServiceTime<1){
+                timeLefted=1-remainingServiceTime;
                 completeRequest();
                 if (informationOutput){
                     System.out.println("Technician "+ fullName+ " is free for now");
                 }
+            }else{
+                remainingServiceTime-=1;
             }
         }
     }

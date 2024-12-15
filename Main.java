@@ -6,9 +6,14 @@ public class Main {
         Scanner in =new Scanner(System.in);
         System.out.println("If you want to enter your data, press E, otherwise any other button");
         String getIt= in.next().toLowerCase(Locale.ROOT);
-        int queueBufferCapacity=4;
-        int technicianQuantity=2;
-        int requestQuantity=15;
+        int queueBufferCapacity=10;
+        int technicianQuantity=20;
+        int requestQuantity=4200;
+        int generatorsAmount=25;
+        int lowTypeTechniciansAmount=10;
+        int leftBorderOfUniformDistribution=0;
+        int rightBorderOfUniformDistribution=2;
+
         if (getIt.equals("e")){
             System.out.println("Enter the buffer capacity (only the number >0 is accepted)");
             queueBufferCapacity=in.nextInt();
@@ -22,8 +27,9 @@ public class Main {
             }
         }
         System.out.println("In this example we have "+technicianQuantity+" technicians,"+requestQuantity+" requests, buffer capacity = "+queueBufferCapacity);
-        MainSystem system = new MainSystem(queueBufferCapacity, technicianQuantity, requestQuantity);
-        system.run();
+
+        MainSystem system = new MainSystem(queueBufferCapacity, technicianQuantity, requestQuantity, generatorsAmount);
+        system.run(leftBorderOfUniformDistribution, rightBorderOfUniformDistribution, lowTypeTechniciansAmount);
         in.close();
     }
 }

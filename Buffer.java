@@ -52,12 +52,12 @@ class Buffer {
         System.out.println();
     }
 
-    public boolean addRequest(Request request) {
+    public int addRequest(Request request) {
         if (requestsBuffer.contains(null)) {
             for (int i = 0; i < requestsBuffer.size(); i++) {
                 if (requestsBuffer.get(i) == null) {
                     requestsBuffer.set(i, request);
-                    return true;
+                    return 0;
                 }
             }
         }
@@ -69,9 +69,10 @@ class Buffer {
                 maxIdFound = i;
             }
         }
+        int returnId=requestsBuffer.get(maxIdFound).getGeneratorId();
         removedAmount++;
         requestsBuffer.set(maxIdFound, request);
-        return false;
+        return returnId;
     }
 
     public void removeRequest(int requestId) {

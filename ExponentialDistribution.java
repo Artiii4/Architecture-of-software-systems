@@ -9,6 +9,6 @@ public class ExponentialDistribution {
     }
 
     public double generateServiceTime() {
-        return -Math.log(1 - random.nextDouble()) / lambda;
+        return Math.abs( Math.log(1 - random.nextDouble()) / lambda);
     }
 }

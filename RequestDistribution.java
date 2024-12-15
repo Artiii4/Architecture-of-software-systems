@@ -1,18 +1,21 @@
+import java.util.ArrayList;
 import java.util.List;
 
 class RequestDistribution {
     private final List<Technician> technicians;
     private Buffer buffer;
+    private ArrayList<RequestGenerator> generators;
     private int lastTechnicianId = 0;
     private boolean informationOutput;
 
-    public RequestDistribution(List<Technician> technicians, Buffer buffer, boolean informationOutput) {
+    public RequestDistribution(List<Technician> technicians, Buffer buffer, boolean informationOutput,ArrayList<RequestGenerator> generators ) {
         this.technicians = technicians;
         this.buffer = buffer;
         this.informationOutput= informationOutput;
+        this.generators=generators;
     }
 
-    public void distributeRequests(Request requestGet) {
+    public boolean distributeRequests(Request requestGet) {
         Technician technician = getFreeTechnician();
         if (buffer.isEmpty()&& technician!=null){
             technician.processRequest(requestGet, informationOutput);
@@ -20,7 +23,18 @@ class RequestDistribution {
                 System.out.println("Assigned Request " + requestGet.getId()+" with discription"+requestGet.getDescription() + " to Technician " + technician.getName());
             }
         }else {
-            buffer.addRequest(requestGet);
+            boolean getBool=false;
+            int getId=buffer.addRequest(requestGet);
+            if (getId==0){
+                getBool=true;
+            }else{
+                for (RequestGenerator generator:generators){
+                    if (generator.getGeneratorId()==getId){
+                        generator.incrementRemovedRequestsCount();
+                        break;
+                    }
+                }
+            }
             if (technician != null) {
                 Request requestToDo = buffer.getNextRequest();
                 technician.processRequest(requestToDo, informationOutput);
@@ -29,14 +43,12 @@ class RequestDistribution {
                     System.out.println("Assigned Request " + requestToDo.getId() + " with discription"+requestGet.getDescription() +" to Technician " + technician.getName());
                 }
             }
+            return getBool;
         }
         if (informationOutput){
             buffer.printAllRequests();
         }
-    }
-
-    public int showRemovedAmount(){
-        return buffer.getRemovedAmount();
+        return true;
     }
 
     public void printBufferDetails() {
@@ -60,7 +72,9 @@ class RequestDistribution {
 
     public void updateTime(){
         for (Technician technician: technicians){
-            technician.updateServiceTime(informationOutput);
+            if (!technician.isAvailable()){
+                technician.updateServiceTime(informationOutput);
+            }
         }
     }
 
