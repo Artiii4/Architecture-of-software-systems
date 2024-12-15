@@ -24,55 +24,117 @@
 -состоянии буфера;
 -начале выполнения заявок мастерами (если они свободны) инеобходимое время для выполнения заказа;
 -освобождении мастеров (если они выполнили заказы).
-C вероятностью в 33% генерируется выполнение заявок мастерами (время выполнения каждой заявки сокращается на 1 единицу времени).
-Пример вывода в пошаговом режиме при генерации двух заявок:
-Time: 1.0
-System has received an request with issue: Upgrade OS
-Current Requests in Buffer:
-v
-3, 4, 5, null, 
+Пример вывода:
+Time: 0
 
-System has received an request with issue: Upgrade of accessories
-Current Requests in Buffer:
-v
-3, 4, 5, 6, 
-Service execution process
+The request buffer is empty.
+Generated Request ID: 1, Description: Board burned out
+Technician David Anderson is processing request 1  service time 1.2606368677703026
+Assigned Request 1 with discriptionBoard burned out to Technician David Anderson
+The request buffer is empty.
+Generated Request ID: 2, Description: Hard drive issue
+Technician Tom Miller is processing request 2  service time 0.44689456925887033
+Assigned Request 2 with discriptionHard drive issue to Technician Tom Miller
+The request buffer is empty.
+Generated Request ID: 3, Description: Board burned out
+Technician Denis Starov is processing request 3  service time 3.1236723289914945
+Assigned Request 3 with discriptionBoard burned out to Technician Denis Starov
+The request buffer is empty.
+Generated Request ID: 4, Description: Replace hardware
+Technician Tom Brown is processing request 4  service time 0.5233351293547819
+Assigned Request 4 with discriptionReplace hardware to Technician Tom Brown
+The request buffer is empty.
+Generated Request ID: 5, Description: Replace hardware
+Technician Thomsa Anderson is processing request 5  service time 1.7947366630071515
+Assigned Request 5 with discriptionReplace hardware to Technician Thomsa Anderson
+The request buffer is empty.
+Generated Request ID: 6, Description: Install software
+Technician Mike Green is processing request 6  service time 1.6835965384516283
+Assigned Request 6 with discriptionInstall software to Technician Mike Green
+The request buffer is empty.
+Generated Request ID: 7, Description: Network issue
+Technician Thomsa Green is processing request 7  service time 1.7056116424258192
+Assigned Request 7 with discriptionNetwork issue to Technician Thomsa Green
+The request buffer is empty.
+Generated Request ID: 8, Description: Replace hardware
+Technician Thomsa Kelly is processing request 8  service time 1.5552405493285653
+Assigned Request 8 with discriptionReplace hardware to Technician Thomsa Kelly
+The request buffer is empty.
+Generated Request ID: 9, Description: Fix printer
+Technician Denis Miller is processing request 9  service time 0.4417131828387626
+Assigned Request 9 with discriptionFix printer to Technician Denis Miller
+The request buffer is empty.
+Generated Request ID: 10, Description: Replace hardware
+Technician John Kelly is processing request 10  service time 1.794281824882973
+Assigned Request 10 with discriptionReplace hardware to Technician John Kelly
+The request buffer is empty.
+Technician Tom Miller is free for now
+Technician Tom Brown is free for now
 Technician Denis Miller is free for now
-После запуска моделирования системы прошло 1 единица времени, и были сгенерированы 2 заявки: "Upgrade OS" и "Upgrade of accessories". 
-В выводе видно, как буфер заполняется заявками, а также отображается указатель на ту заявку, 
-которая будет выполняться следующей (в соответствии с выбором по кольцу). После информации о заполненности буфера 
-выводится этап выполнения заявок, где отмечено, что один из мастеров (Denis Miller) завершил свою задачу.
-Это позволяет наглядно проследить генерацию, распределение и выполнение заявок в системе.
-
-Помимо этого, в конце моделирование выведется информация о заявках, которые мастера выполняют на момент вывода данных 
-(если мастер свободен, выведется -1).
-Пример такого вывода:
-At the end:
-Andrew Smith - Current Request: -1
-Ivan Green - Current Request: 5
+The request buffer is empty.
 
 Описание автоматического режима:
 Пользователю не требуется предпринимать никаких действий. 
-По завершении работы программы будет выведена информация о количестве обработанных и отклонённых заявок, 
-а также таблицы с данными о состоянии мастеров и буфера.
+По завершении работы программы будет выведена информация о работе модели.
 Пример вывода:
-Applications received 15 requests and removed 0
+Summary Statistics:
+| Requests   | Generators | Technicians     | Buffer size     | Time in system  | Rejection probability     | Average workload     | Uniform distribution law:  Left boundary   | Right boundary  |
+===================================================================================================================================================================================================
+| 4200       | 25         | 20              | 10              | 293             | 6.50                      | 93.33                |                            0               | 2               |
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Information about technicians:
-Id         Full Name            Completed Requests             Current Request               
-==========================================================================================
-1          Denis Sergeev        1                              9                             
-2          Tom Green            4                              10                            
-3          Mike Anderson        1                              12                            
-4          Tom Sergeev          2                              11                            
-------------------------------------------------------------------------------------------
+Technician Workloads:
+| ID   | Name            | Busy Time    | Load (%) |
+====================================================
+| 1    | Kevin Sergeev   | 293.0        | 100.0    |
+| 2    | Denis Sergeev   | 293.0        | 100.0    |
+| 3    | Ivan Miller     | 293.0        | 100.0    |
+| 4    | Ivan Starov     | 293.0        | 100.0    |
+| 5    | David Brown     | 293.0        | 100.0    |
+| 6    | David Kelly     | 293.0        | 100.0    |
+| 7    | Bob Miller      | 293.0        | 100.0    |
+| 8    | Kevin Miller    | 292.0        | 99.7     |
+| 9    | Bob Starov      | 293.0        | 100.0    |
+| 10   | Andrew Brown    | 292.0        | 99.7     |
+| 11   | Mike Anderson   | 293.0        | 100.0    |
+| 12   | David Kelly     | 290.0        | 99.0     |
+| 13   | Tom Brown       | 288.0        | 98.3     |
+| 14   | Mike Smith      | 279.0        | 95.2     |
+| 15   | John Brown      | 268.0        | 91.5     |
+| 16   | Bob Brown       | 257.0        | 87.7     |
+| 17   | Tom Anderson    | 228.0        | 77.8     |
+| 18   | Kevin Anderson  | 189.0        | 64.5     |
+| 19   | Bob Miller      | 157.0        | 53.6     |
+| 20   | Ivan Kelly      | 292.0        | 99.7     |
+----------------------------------------------------
 
-Information about buffer:
-Request ID Description                   
-========================================
-14         Hard drive issue              
-15         Viruses cleaning              
-null       No request                    
-13         Board burned out              
-----------------------------------------
+Request Generators Info:
+| ID   | Created Requests     | Removed Requests     | Remaining Reque | Rejection Proba      |
+===============================================================================================
+| 0    | 169                  | 0                    | 169             | 0.00                 |
+| 1    | 181                  | 0                    | 181             | 0.00                 |
+| 2    | 170                  | 0                    | 170             | 0.00                 |
+| 3    | 166                  | 0                    | 166             | 0.00                 |
+| 4    | 170                  | 0                    | 170             | 0.00                 |
+| 5    | 171                  | 0                    | 171             | 0.00                 |
+| 6    | 169                  | 0                    | 169             | 0.00                 |
+| 7    | 180                  | 0                    | 180             | 0.00                 |
+| 8    | 175                  | 0                    | 175             | 0.00                 |
+| 9    | 164                  | 0                    | 164             | 0.00                 |
+| 10   | 162                  | 0                    | 162             | 0.00                 |
+| 11   | 175                  | 0                    | 175             | 0.00                 |
+| 12   | 163                  | 2                    | 161             | 1.23                 |
+| 13   | 168                  | 1                    | 167             | 0.60                 |
+| 14   | 177                  | 3                    | 174             | 1.69                 |
+| 15   | 155                  | 4                    | 151             | 2.58                 |
+| 16   | 160                  | 4                    | 156             | 2.50                 |
+| 17   | 169                  | 6                    | 163             | 3.55                 |
+| 18   | 164                  | 11                   | 153             | 6.71                 |
+| 19   | 167                  | 14                   | 153             | 8.38                 |
+| 20   | 157                  | 18                   | 139             | 11.46                |
+| 21   | 165                  | 31                   | 134             | 18.79                |
+| 22   | 163                  | 46                   | 117             | 28.22                |
+| 23   | 170                  | 57                   | 113             | 33.53                |
+| 24   | 171                  | 76                   | 95              | 44.44                |
+-----------------------------------------------------------------------------------------------
 </pre>
