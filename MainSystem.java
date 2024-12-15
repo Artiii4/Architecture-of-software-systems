@@ -98,9 +98,6 @@ class MainSystem {
                 .mapToDouble(Technician::getTotalBusyTime).sum();
         double averageLoad = totalBusyTime / (time * technicianQuantity);
 
-        System.out.println("!"+ (requestsQuantity-deniedRequests));
-        System.out.println(deniedRequests);
-
         System.out.println("\nSummary Statistics:");
         String summaryHeader = "| %-10s | %-10s | %-15s | %-15s | %-15s | %-25s | %-20s | %-25s  %-15s | %-15s |%n";
         System.out.printf(summaryHeader,
